@@ -1,0 +1,1 @@
+export const DB_NAME = 'Payment-gateway-practice'
