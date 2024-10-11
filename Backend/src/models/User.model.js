@@ -22,8 +22,8 @@ const userSchema = new Schema(
             min: 6
         },
         subscriptionPlan: {
-            type: String,
-            default: 'None'
+            type: Schema.Types.ObjectId,
+            ref: 'Subscription',
         }
     },
     { timestamps: true }
