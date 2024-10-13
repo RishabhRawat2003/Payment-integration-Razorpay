@@ -7,9 +7,9 @@ import { SubscriptionPlan } from "../models/SubscriptionPlan.model.js";
 //Only Admin can call these controllers from API's from his Admin Dashboard
 
 const createSubscriptionPlan = asyncHandler(async (req, res) => {
-    const { planName, monthlyPrice, yearlyPrice } = req.body
+    const { planName, price } = req.body
 
-    if(!planName || !monthlyPrice || !yearlyPrice){
+    if (!planName || !price) {
         throw new ApiError(400, "Please fill all the fields")
     }
 
@@ -19,7 +19,7 @@ const createSubscriptionPlan = asyncHandler(async (req, res) => {
         throw new ApiError(400, "Plan name already exists")
     }
 
-    const newSubscriptionPlan = await SubscriptionPlan.create({ planName, monthlyPrice, yearlyPrice })
+    const newSubscriptionPlan = await SubscriptionPlan.create({ planName, price })
 
     if (!newSubscriptionPlan) {
         throw new ApiError(500, "Failed to create subscription plan")
@@ -33,9 +33,9 @@ const createSubscriptionPlan = asyncHandler(async (req, res) => {
 })
 
 const updateSubscriptionPlanDetails = asyncHandler(async (req, res) => {
-    const { planName, monthlyPrice, yearlyPrice } = req.body
+    const { planName, price } = req.body
 
-    if(!planName || !monthlyPrice || !yearlyPrice){
+    if (!planName || !price) {
         throw new ApiError(400, "Please fill all the fields")
     }
 
@@ -44,8 +44,7 @@ const updateSubscriptionPlanDetails = asyncHandler(async (req, res) => {
         {
             $set: {
                 planName,
-                monthlyPrice,
-                yearlyPrice
+                price
             }
         },
         { new: true }

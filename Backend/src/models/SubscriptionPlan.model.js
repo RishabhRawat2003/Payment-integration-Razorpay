@@ -7,13 +7,9 @@ const SubscriptionPlanDetails = new Schema(
             required: true,
             unique: true,
         },
-        monthlyPrice: {
+        price: {
             type: Number,
-            required: true,
-        },
-        yearlyPrice: {
-            type: Number,
-            required: true,
+            required: true
         }
     }, {
     timestamps: true
