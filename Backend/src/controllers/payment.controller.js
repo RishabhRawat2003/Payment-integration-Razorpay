@@ -5,7 +5,7 @@ import { SubscriptionPlan } from "../models/SubscriptionPlan.model.js";
 import { razorpayInstance } from "../config/razorpay.config.js";
 import crypto from 'crypto'
 
-const razorpayInstanceValue = razorpayInstance()
+// const razorpayInstanceValue = razorpayInstance()
 
 const createOrder = asyncHandler(async (req, res) => {
     const { courseId } = req.body

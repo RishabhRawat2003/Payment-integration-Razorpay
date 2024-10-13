@@ -1,5 +1,4 @@
 import razorpay from 'razorpay'
-import dotenv from 'dotenv'
 
 const razorpayInstance = () => {
     return new razorpay({
