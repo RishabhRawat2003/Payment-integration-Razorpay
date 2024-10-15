@@ -79,5 +79,17 @@ const deleteSubscriptionPlan = asyncHandler(async (req, res) => {
 })
 
 
+const allSubscriptionPlansDetails = asyncHandler(async(req,res)=>{
+    const findSubscriptionPlans = await SubscriptionPlan.find().populate('planName')
+    if(!findSubscriptionPlans){
+        throw new ApiError(404, "Subscription plans not found")
+    }
+    return res
+    .status(200)
+    .json(new ApiResponse(200,findSubscriptionPlans,"All Plans Fetched"))
+    
+})
 
-export { createSubscriptionPlan, updateSubscriptionPlanDetails, deleteSubscriptionPlan }
+
+
+export { createSubscriptionPlan, updateSubscriptionPlanDetails, deleteSubscriptionPlan , allSubscriptionPlansDetails}

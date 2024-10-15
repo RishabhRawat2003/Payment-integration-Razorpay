@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import { MdOutlineDone } from "react-icons/md";
+import { MdErrorOutline } from "react-icons/md";
 
 function CreateAccount() {
     const [formData, setFormData] = useState({
@@ -8,6 +10,11 @@ function CreateAccount() {
         username: '',
         password: '',
     })
+    const [successPopUp, setSuccessPopUp] = useState(false)
+    const [errorPopUp, setErrorPopUp] = useState(false)
+    const [loading, setLoading] = useState(false)
+
+    const navigate = useNavigate()
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -16,12 +23,14 @@ function CreateAccount() {
             [name]: value,
         }));
     };
-    
+
 
     const handleSubmit = async () => {
         try {
+            setLoading(true)
             const response = await axios.post('/api/v1/users/register', formData)
-            console.log(response.data.data);
+            setLoading(false)
+            setSuccessPopUp(true)
             setFormData({
                 fullName: '',
                 username: '',
@@ -29,8 +38,18 @@ function CreateAccount() {
             })
         } catch (error) {
             console.log("Error while registering");
+            setErrorPopUp(true)
 
         }
+    }
+
+    const loginPage = () => {
+        navigate('/')
+        setSuccessPopUp(false)
+    }
+
+    const errorHandle = () => {
+        setErrorPopUp(false)
     }
 
 
@@ -59,6 +78,39 @@ function CreateAccount() {
                     Already have an account? <NavLink to='/' className='text-[#fd482f] hover:underline cursor-pointer'>Login</NavLink>
                 </div>
             </div>
+            {successPopUp && (
+                <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-40">
+                    <div className="bg-white rounded-lg shadow-lg p-6 w-80 text-center">
+                        <div className='w-full h-auto flex justify-center items-center my-3'>
+                            <span className='p-4 rounded-full bg-green-100'>
+                                <MdOutlineDone size={25} className='text-green-500' />
+                            </span>
+                        </div>
+                        <h2 className="text-lg font-semibold mb-1">Account Created</h2>
+                        <div onClick={loginPage} className='w-full h-auto bg-[#fd482f] font-medium text-center text-white rounded-lg py-2 mb-4 cursor-pointer active:bg-[#ff1e00e2] hover:bg-[#ff1e00e2] mt-8'>Login</div>
+                    </div>
+                </div>
+            )}
+            {errorPopUp && (
+                <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-40">
+                    <div className="bg-white rounded-lg shadow-lg p-6 w-80 text-center">
+                        <div className='w-full h-auto flex justify-center items-center my-3'>
+                            <span className='p-4 rounded-full bg-red-100'>
+                                <MdErrorOutline size={25} className='text-red-500' />
+                            </span>
+                        </div>
+                        <h2 className="text-lg font-semibold mb-1">Something went wrong!</h2>
+                        <div onClick={errorHandle} className='w-full h-auto bg-[#fd482f] font-medium text-center text-white rounded-lg py-2 mb-4 cursor-pointer active:bg-[#ff1e00e2] hover:bg-[#ff1e00e2] mt-8'>Try Again</div>
+                    </div>
+                </div>
+            )}
+            {
+                loading && (
+                    <div className="w-full z-20 flex flex-col items-center justify-center p-6 transition-opacity duration-300 ease-in-out fixed inset-0 bg-gray-800 bg-opacity-60">
+                        <div className="spinner border-t-4 mt-5 border-blue-500 border-solid rounded-full w-16 h-16 animate-spin"></div>
+                    </div>
+                )
+            }
         </div>
     )
 }

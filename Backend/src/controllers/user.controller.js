@@ -52,4 +52,22 @@ const userLogin = asyncHandler(async (req, res) => {
         .json(new ApiResponse(200, userDetails, "User Logged in Successfully"))
 })
 
-export { userRegister, userLogin }
+const userDetails = asyncHandler(async (req, res) => {
+    const { userId } = req.body
+
+    if (!userId) {
+        throw new ApiError(400, "User ID is required")
+    }
+
+    const user = await User.findById(userId).select("-password")
+
+    if (!user) {
+        throw new ApiError(404, "User not Found")
+    }
+
+    return res
+        .status(200)
+        .json(new ApiResponse(200, user, "User details fetched successfully"))
+})
+
+export { userRegister, userLogin, userDetails }
