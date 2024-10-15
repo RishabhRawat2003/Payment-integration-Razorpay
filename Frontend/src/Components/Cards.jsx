@@ -108,7 +108,7 @@ function Cards() {
                     <p className='text-gray-800 text-xs w-full text-center font-textFont mt-2 lg:text-base'>One Full Month Free</p>
                     <p className='text-gray-800 text-xs w-full text-center font-textFont mt-2 lg:text-base'>First 25 Members Only</p>
                     <div className='w-full h-auto flex justify-center items-center mt-10 mb-5'>
-                        <span className='p-3 px-6 border-2 active:bg-black active:text-white active:border-white md:hover:bg-black md:hover:text-white md:hover:border-white border-black cursor-pointer'>Get Started</span>
+                        <span onClick={() => onPayment(standardPlan._id)}  className='p-3 px-6 border-2 active:bg-black active:text-white active:border-white md:hover:bg-black md:hover:text-white md:hover:border-white border-black cursor-pointer'>Get Started</span>
                     </div>
                 </div>
                 <div className='w-full h-auto flex flex-col bg-gray-200 sm:w-[30%] sm:h-[80%] xl:w-[22%] rounded-md'>
@@ -123,7 +123,7 @@ function Cards() {
                     <p className='text-gray-800 text-xs w-full text-center font-textFont mt-2 lg:text-base'><span className='font-bold text-black'>60 Class</span> Times Available</p>
                     <p className='text-gray-800 text-xs w-full text-center font-textFont mt-2 lg:text-base'>50 Minutes of Invigorating Yoga</p>
                     <div className='w-full h-auto flex justify-center items-center mt-10 mb-5'>
-                        <span className='p-3 px-6 bg-black text-white active:bg-gray-200  active:text-black md:hover:bg-gray-200  md:hover:text-black border-black border-2  cursor-pointer'>Get Started</span>
+                        <span onClick={() => onPayment(premiumPlan._id)}  className='p-3 px-6 bg-black text-white active:bg-gray-200  active:text-black md:hover:bg-gray-200  md:hover:text-black border-black border-2  cursor-pointer'>Get Started</span>
                     </div>
                 </div>
             </div>
