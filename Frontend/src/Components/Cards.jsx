@@ -5,11 +5,61 @@ import { FaStar } from "react-icons/fa";
 import axios from 'axios';
 
 function Cards() {
-    const [basicPlan,setBasicPlan] = useState({})
-    const [standardPlan,setStandardPlan] = useState({})
-    const [premiumPlan,setPremiumPlan] = useState({})
+    const [basicPlan, setBasicPlan] = useState({})
+    const [standardPlan, setStandardPlan] = useState({})
+    const [premiumPlan, setPremiumPlan] = useState({})
 
-    useEffect(()=>{
+    const loadScript = (src) => {
+        return new Promise((resolve) => {
+            const script = document.createElement('script');
+            script.src = src;
+            script.onload = () => {
+                resolve(true);
+            }
+            script.onerror = () => {
+                resolve(false);
+            }
+            document.body.appendChild(script);
+        })
+    }
+
+    async function onPayment(courseId) {
+        try {
+            const option = {
+                courseId
+            }
+            const response = await axios.post("/api/v1/payment/create-order", option)
+            const data = response.data.data
+
+            const paymentObject = new window.Razorpay({
+                key: "rzp_test_ZkEAtdmouhqkw4",
+                order_id: data.id,
+                ...data,
+                handler: function (response) {
+                    const option2 = {
+                        orderId: response.razorpay_order_id,
+                        paymentId: response.razorpay_payment_id,
+                        signature: response.razorpay_signature
+                    }
+                    axios.post("/api/v1/payment/verify-payment", option2)
+                        .then((response) => {
+                            if (response.data.success === true) {
+                                alert("Payment Successfull");
+                            } else {
+                                alert("Payment Failed");
+                            }
+                        }).catch((err) => {
+                            console.log(err);
+                        })
+                }
+            })
+            paymentObject.open()
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    useEffect(() => {
         async function allPlansFetched() {
             try {
                 const response = await axios.post("/api/v1/subscriptionPlan/all-plans")
@@ -18,11 +68,12 @@ function Cards() {
                 setStandardPlan(planArr[1])
                 setPremiumPlan(planArr[2])
             } catch (error) {
-                console.log("Error while throwing Error",error);
+                console.log("Error while throwing Error", error);
             }
         }
-        allPlansFetched() 
-    },[])
+        allPlansFetched()
+        loadScript('https://checkout.razorpay.com/v1/checkout.js')
+    }, [])
 
     return (
         <div className='w-full h-auto flex flex-col mt-4'>
@@ -39,7 +90,7 @@ function Cards() {
                     <p className='text-gray-800 text-xs w-full text-center font-textFont mt-2 lg:text-base'><span className='font-bold text-black'>50 Class</span> Times Available</p>
                     <p className='text-gray-800 text-xs w-full text-center font-textFont mt-2 lg:text-base'>20 Minutes of Invigorating Yoga</p>
                     <div className='w-full h-auto flex justify-center items-center mt-10 mb-5'>
-                        <span className='p-3 px-6 bg-black text-white active:bg-gray-200  active:text-black md:hover:bg-gray-200  md:hover:text-black border-black border-2 cursor-pointer'>Get Started</span>
+                        <span onClick={() => onPayment(basicPlan._id)} className='p-3 px-6 bg-black text-white active:bg-gray-200  active:text-black md:hover:bg-gray-200  md:hover:text-black border-black border-2 cursor-pointer'>Get Started</span>
                     </div>
                 </div>
                 <div className='w-full h-auto flex flex-col bg-gray-200 sm:w-[30%] xl:w-[22%] rounded-md'>
@@ -77,7 +128,7 @@ function Cards() {
                 </div>
             </div>
         </div>
-        
+
     )
 }
 

@@ -36,7 +36,7 @@ function Homepage() {
     )
   } else {
     return (
-      <div className='w-screen h-full bg-[#141414] flex flex-col sm:h-screen'>
+      <div className='w-screen min-h-screen max-h-auto bg-[#141414] flex flex-col'>
         <header className='w-full h-auto p-4 border-b-[1px] border-white flex justify-between items-center md:p-5 xl:p-6'>
           <div className='text-white md:text-xl xl:text-2xl font-semibold'>{username}</div>
           <div onClick={() => setLogoutPopUp(true)} className='text-white text-xs md:text-base cursor-pointer md:hover:underline'>Logout</div>

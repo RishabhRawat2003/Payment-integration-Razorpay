@@ -1,20 +1,23 @@
 import asyncHandler from "../utils/asyncHandler.js";
+import mongoose from "mongoose";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { SubscriptionPlan } from "../models/SubscriptionPlan.model.js";
 import { razorpayInstance } from "../config/razorpay.config.js";
 import crypto from 'crypto'
 
-// const razorpayInstanceValue = razorpayInstance()
+const razorpayInstanceValue = razorpayInstance()
+
 
 const createOrder = asyncHandler(async (req, res) => {
     const { courseId } = req.body
-
+    
     if (!courseId) {
         throw new ApiError(400, "Course ID is required")
     }
 
     const course = await SubscriptionPlan.findById(courseId)
+    
     if (!course) {
         throw new ApiError(404, "Course not found")
     }
@@ -63,4 +66,4 @@ const verifyPayment = asyncHandler(async (req, res) => {
 })
 
 
-export { createOrder , verifyPayment}
+export { createOrder, verifyPayment }
